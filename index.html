@@ -20,51 +20,51 @@
 <script>
     const courses = [
         {
-            name: 'Course 1',
+            name: 'Product Owner',
             questions: [
-                'I strongly agree with...',
-                'Another question for Course 1...',
-                'And one more question for Course 1...'
+                'I love engaging and collaborating with customers to meet their needs.',
+                'I am passionate about exceeding customers satisfaction.',
+                'I enjoy prioritizing tasks and meeting deadlines in a business environment'
             ]
         },
         {
-            name: 'Course 2',
+            name: 'Business Analysis',
             questions: [
-                'I enjoy...',
-                'For Course 2, another question...',
-                'And yet another question for Course 2...'
+                'I enjoy creating comprehensive documentation of my works when it comes to tasks and projects.',
+                'I love fostering valuable transformations in my organization',
+                'I like finding solutions to problems.'
             ]
         },
         {
-            name: 'Course 3',
+            name: 'Scrum Master',
             questions: [
-                'I find it easy to...',
-                'For Course 3, another question...',
-                'And yet another question for Course 3...'
+                'I enjoy coaching and inspiring others to achieve common goals.',
+                'I am good at facilitating discussions',
+                'I enjoy helping people identify their strengths to take ownership of their responsibilities'
             ]
         },
         {
-            name: 'Course 4',
+            name: 'Project Management',
             questions: [
-                'I believe that...',
-                'For Course 4, another question...',
-                'And yet another question for Course 4...'
+                'I enjoy planning and managing resources and projects to meet deadlines.',
+                'I have a passion for identifying and mitigating risks.',
+                'I enjoy developing ideas that are results oriented.'
             ]
         },
         {
-            name: 'Course 5',
+            name: 'Data Analysis',
             questions: [
-                'I am interested in...',
-                'For Course 5, another question...',
-                'And yet another question for Course 5...'
+                'I enjoy processing data to gain insights',
+                'I like transforming data into meaningful visual representations',
+                'I enjoy using numbers to represent results'
             ]
         },
         {
-            name: 'Course 6',
+            name: 'Cyber Security',
             questions: [
-                'I feel confident...',
-                'For Course 6, another question...',
-                'And yet another question for Course 6...'
+                'I am very conscious of protecting my details both online and offline.',
+                'I ensure my personal information are protected at all times',
+                'I always ensure my laptop is password protected.'
             ]
         },
     ];
@@ -103,35 +103,7 @@
 
     generateQuestions();
 
-    function submitForm() {
-        // Collecting and calculating points for each course
-        const courses = ['Course 1', 'Course 2', 'Course 3', 'Course 4', 'Course 5', 'Course 6'];
-        const coursePoints = {};
-
-        courses.forEach(course => {
-            const questions = document.querySelectorAll(`[name^="${course.toLowerCase()}"]`);
-            let points = 0;
-
-            questions.forEach(question => {
-                points += parseInt(question.value);
-            });
-
-            coursePoints[course] = points;
-        });
-
-        // Finding the course with the most points
-        const maxPoints = Math.max(...Object.values(coursePoints));
-        const winningCourses = Object.keys(coursePoints).filter(course => coursePoints[course] === maxPoints);
-
-        // Displaying results
-        if (winningCourses.length === 1) {
-            alert(`Congratulations! You are recommended to take ${winningCourses[0]}.`);
-        } else {
-            let message = `You have a tie between the following courses: ${winningCourses.join(', ')}.`;
-            message += '\nContact a coach for guidance on which course to choose.';
-            alert(message);
-        }
-    }
+    
 </script>
 
 </body>
