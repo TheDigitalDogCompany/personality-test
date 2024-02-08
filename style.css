@@ -42,3 +42,12 @@ button {
 button:hover {
     background-color: #45a049;
 }
+
+.mt {
+    margin-top: 100px;
+    font-weight: 700;
+}
+
+.btn-container {
+    text-align: right;
+}

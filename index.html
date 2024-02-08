@@ -9,22 +9,40 @@
 </head>
 
 <body>
+    <div id="verificationContainer">
+        <form id="verificationForm">
+            <h2>You need to verify your email before taking the personality test</h2>
 
-    <form id="personalityForm">
-        <h2>Personality Test</h2>
+            <!-- User Information -->
+            <label for="userName">Full Name (min. 8 characters):</label>
+            <input type="text" id="userName" name="userName" required minlength="8">
 
-        <!-- User Information -->
-    <label for="userName">Name (min. 8 characters):</label>
-    <input type="text" id="userName" name="userName" required minlength="8">
+            <label for="userEmail">Email Address (Gmail or Yahoo only):</label>
+            <input type="email" id="userEmail" name="userEmail" required pattern="[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com)">
+            <div class="btn-container">
+                <button type="button" onclick="sendVerificationCode()">Send Verification Code</button>
+            </div>
 
-    <label for="userEmail">Email (Gmail or Yahoo only):</label>
-    <input type="email" id="userEmail" name="userEmail" required pattern="[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com)">
+            <label for="verificationCode" class="mt">Pls check your mail and enter the verification code:</label>
+            <input type="text" id="verificationCode" name="verificationCode" required>
 
-        <!-- Questions dynamically generated with JavaScript -->
-        <div id="questionsContainer"></div>
+            <div class="btn-container">
+                <button type="button" onclick="verifyCode()">Verify Code</button>
+            </div>
+        </form>
+    </div>
 
-        <button type="button" onclick="submitForm()">Submit</button>
-    </form>
+    <div id="questionsContainer" style="display: none;">
+        <form id="personalityForm">
+            <h2>Personality Test</h2>
+
+            <!-- Questions dynamically generated with JavaScript -->
+            <div id="questions"></div>
+            <div class="btn-container">
+                <button type="button" onclick="submitForm()">Submit</button>
+            </div>
+        </form>
+    </div>
 
     <script>
         const courses = [
@@ -79,7 +97,7 @@
         ];
 
         function generateQuestions() {
-            const questionsContainer = document.getElementById('questionsContainer');
+            const questionsContainer = document.getElementById('questions');
 
             courses.forEach(course => {
                 const fieldset = document.createElement('fieldset');
@@ -109,8 +127,82 @@
                 questionsContainer.appendChild(fieldset);
             });
         }
+        function showQuestions() {
+            document.getElementById('verificationContainer').style.display = 'none';
+            document.getElementById('questionsContainer').style.display = 'block';
+            generateQuestions();
+        }
 
-        generateQuestions();
+        function sendVerificationCode() {
+            const userEmailInput = document.getElementById('userEmail');
+
+            // Validate user input
+            if (!userEmailInput.checkValidity()) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+
+            // Make a request to your server to send the verification code
+            const requestOptions = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: userEmailInput.value,
+                }),
+            };
+
+            fetch('http://localhost:3000/sendVerificationCode', requestOptions)
+                .then(response => {
+                    if (response.ok) {
+                        alert('Verification code sent successfully!');
+                    } else {
+                        alert('Error sending verification code. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again later.');
+                });
+        }
+
+        function verifyCode() {
+            const userEmailInput = document.getElementById('userEmail');
+            const codeInput = document.getElementById('verificationCode');
+
+            // Validate email and code inputs
+            if (!userEmailInput.checkValidity() || !codeInput.checkValidity()) {
+                alert('Please enter a valid email and verification code.');
+                return;
+            }
+
+            // Make a request to your server to verify the code
+            const requestOptions = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: userEmailInput.value,
+                    code: codeInput.value,
+                }),
+            };
+
+            fetch('http://localhost:3000/verifyCode', requestOptions)
+                .then(response => {
+                    if (response.ok) {
+                        alert('Verification successful!');
+                        showQuestions();
+                    } else {
+                        alert('Verification failed. Please check your email and try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again later.');
+                });
+        }
 
         function submitForm() {
 
