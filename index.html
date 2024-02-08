@@ -36,7 +36,7 @@
         <form id="personalityForm">
             <h2>Personality Test</h2>
 
-            <!-- Questions dynamically generated with JavaScript -->
+            <!-- Questions dynamically generated -->
             <div id="questions"></div>
             <div class="btn-container">
                 <button type="button" onclick="submitForm()">Submit</button>
@@ -142,7 +142,7 @@
                 return;
             }
 
-            // Make a request to your server to send the verification code
+            // Make a request to the server to send the verification code
             const requestOptions = {
                 method: 'POST',
                 headers: {
@@ -177,7 +177,7 @@
                 return;
             }
 
-            // Make a request to your server to verify the code
+            // Make a request to the server to verify the code
             const requestOptions = {
                 method: 'POST',
                 headers: {
@@ -195,7 +195,7 @@
                         alert('Verification successful!');
                         showQuestions();
                     } else {
-                        alert('Verification failed. Please check your email and try again.');
+                        alert('Verification failed. Please make sure the code is correct and try again.');
                     }
                 })
                 .catch(error => {
