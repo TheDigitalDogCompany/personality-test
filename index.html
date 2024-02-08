@@ -103,7 +103,34 @@
 
     generateQuestions();
 
-    
+    function submitForm() {
+        // Collecting and calculating points for each course
+        const coursePoints = {};
+
+        courses.forEach(course => {
+            coursePoints[course.name] = 0;
+
+            course.questions.forEach((_, index) => {
+                const radioInput = document.querySelector(`input[name="${course.name.replace(/\s+/g, '').toLowerCase()}q${index + 1}"]:checked`);
+                if (radioInput) {
+                    coursePoints[course.name] += parseInt(radioInput.value);
+                }
+            });
+        });
+
+        // Finding the course with the most points
+        const maxPoints = Math.max(...Object.values(coursePoints));
+        const winningCourses = Object.keys(coursePoints).filter(course => coursePoints[course] === maxPoints);
+
+        // Displaying results
+        if (winningCourses.length === 1) {
+            alert(`Congratulations! You are recommended to take ${winningCourses[0]}.`);
+        } else {
+            let message = `You have a tie between the following courses: ${winningCourses.join(', ')}.`;
+            message += '\nContact a coach for guidance on which course to choose.';
+            alert(message);
+        }
+    }
 </script>
 
 </body>
