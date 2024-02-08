@@ -1,137 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Personality Test</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<form id="personalityForm">
-    <h2>Personality Test</h2>
+    <form id="personalityForm">
+        <h2>Personality Test</h2>
 
-    <!-- Questions dynamically generated with JavaScript -->
-    <div id="questionsContainer"></div>
+        <!-- User Information -->
+    <label for="userName">Name (min. 8 characters):</label>
+    <input type="text" id="userName" name="userName" required minlength="8">
 
-    <button type="button" onclick="submitForm()">Submit</button>
-</form>
+    <label for="userEmail">Email (Gmail or Yahoo only):</label>
+    <input type="email" id="userEmail" name="userEmail" required pattern="[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com)">
 
-<script>
-    const courses = [
-        {
-            name: 'Product Owner',
-            questions: [
-                'I love engaging and collaborating with customers to meet their needs.',
-                'I am passionate about exceeding customers satisfaction.',
-                'I enjoy prioritizing tasks and meeting deadlines in a business environment'
-            ]
-        },
-        {
-            name: 'Business Analysis',
-            questions: [
-                'I enjoy creating comprehensive documentation of my works when it comes to tasks and projects.',
-                'I love fostering valuable transformations in my organization',
-                'I like finding solutions to problems.'
-            ]
-        },
-        {
-            name: 'Scrum Master',
-            questions: [
-                'I enjoy coaching and inspiring others to achieve common goals.',
-                'I am good at facilitating discussions',
-                'I enjoy helping people identify their strengths to take ownership of their responsibilities'
-            ]
-        },
-        {
-            name: 'Project Management',
-            questions: [
-                'I enjoy planning and managing resources and projects to meet deadlines.',
-                'I have a passion for identifying and mitigating risks.',
-                'I enjoy developing ideas that are results oriented.'
-            ]
-        },
-        {
-            name: 'Data Analysis',
-            questions: [
-                'I enjoy processing data to gain insights',
-                'I like transforming data into meaningful visual representations',
-                'I enjoy using numbers to represent results'
-            ]
-        },
-        {
-            name: 'Cyber Security',
-            questions: [
-                'I am very conscious of protecting my details both online and offline.',
-                'I ensure my personal information are protected at all times',
-                'I always ensure my laptop is password protected.'
-            ]
-        },
-    ];
+        <!-- Questions dynamically generated with JavaScript -->
+        <div id="questionsContainer"></div>
 
-    function generateQuestions() {
-        const questionsContainer = document.getElementById('questionsContainer');
+        <button type="button" onclick="submitForm()">Submit</button>
+    </form>
 
-        courses.forEach(course => {
-            const fieldset = document.createElement('fieldset');
-            fieldset.innerHTML = `<legend>${course.name}</legend>`;
+    <script>
+        const courses = [
+            {
+                name: 'Product Owner',
+                questions: [
+                    'I love engaging and collaborating with customers to meet their needs.',
+                    'I am passionate about exceeding customers satisfaction.',
+                    'I enjoy prioritizing tasks and meeting deadlines in a business environment'
+                ]
+            },
+            {
+                name: 'Business Analysis',
+                questions: [
+                    'I enjoy creating comprehensive documentation of my works when it comes to tasks and projects.',
+                    'I love fostering valuable transformations in my organization',
+                    'I like finding solutions to problems.'
+                ]
+            },
+            {
+                name: 'Scrum Master',
+                questions: [
+                    'I enjoy coaching and inspiring others to achieve common goals.',
+                    'I am good at facilitating discussions',
+                    'I enjoy helping people identify their strengths to take ownership of their responsibilities'
+                ]
+            },
+            {
+                name: 'Project Management',
+                questions: [
+                    'I enjoy planning and managing resources and projects to meet deadlines.',
+                    'I have a passion for identifying and mitigating risks.',
+                    'I enjoy developing ideas that are results oriented.'
+                ]
+            },
+            {
+                name: 'Data Analysis',
+                questions: [
+                    'I enjoy processing data to gain insights',
+                    'I like transforming data into meaningful visual representations',
+                    'I enjoy using numbers to represent results'
+                ]
+            },
+            {
+                name: 'Cyber Security',
+                questions: [
+                    'I am very conscious of protecting my details both online and offline.',
+                    'I ensure my personal information are protected at all times',
+                    'I always ensure my laptop is password protected.'
+                ]
+            },
+        ];
 
-            course.questions.forEach((question, index) => {
-                const questionLabel = document.createElement('label');
-                questionLabel.innerHTML = `Question ${index + 1}: ${question}`;
+        function generateQuestions() {
+            const questionsContainer = document.getElementById('questionsContainer');
 
-                const radioLabels = ['Strongly Agree', 'Agree', 'Disagree', 'Strongly Disagree'];
+            courses.forEach(course => {
+                const fieldset = document.createElement('fieldset');
+                fieldset.innerHTML = `<legend>${course.name}</legend>`;
 
-                radioLabels.forEach((label, i) => {
-                    const radioInput = document.createElement('input');
-                    radioInput.type = 'radio';
-                    radioInput.name = `${course.name.replace(/\s+/g, '').toLowerCase()}q${index + 1}`;
-                    radioInput.value = i === 0 ? '3' : i === 1 ? '1' : i === 2 ? '0' : '-3';
+                course.questions.forEach((question, index) => {
+                    const questionLabel = document.createElement('label');
+                    questionLabel.innerHTML = `Question ${index + 1}: ${question}`;
 
-                    const radioInputLabel = document.createElement('label');
-                    radioInputLabel.innerHTML = `${radioInput.outerHTML} ${label}`;
+                    const radioLabels = ['Strongly Agree', 'Agree', 'Disagree', 'Strongly Disagree'];
 
-                    questionLabel.appendChild(radioInputLabel);
+                    radioLabels.forEach((label, i) => {
+                        const radioInput = document.createElement('input');
+                        radioInput.type = 'radio';
+                        radioInput.name = `${course.name.replace(/\s+/g, '').toLowerCase()}q${index + 1}`;
+                        radioInput.value = i === 0 ? '3' : i === 1 ? '1' : i === 2 ? '0' : '-3';
+
+                        const radioInputLabel = document.createElement('label');
+                        radioInputLabel.innerHTML = `${radioInput.outerHTML} ${label}`;
+
+                        questionLabel.appendChild(radioInputLabel);
+                    });
+
+                    fieldset.appendChild(questionLabel);
                 });
 
-                fieldset.appendChild(questionLabel);
+                questionsContainer.appendChild(fieldset);
             });
-
-            questionsContainer.appendChild(fieldset);
-        });
-    }
-
-    generateQuestions();
-
-    function submitForm() {
-        // Collecting and calculating points for each course
-        const coursePoints = {};
-
-        courses.forEach(course => {
-            coursePoints[course.name] = 0;
-
-            course.questions.forEach((_, index) => {
-                const radioInput = document.querySelector(`input[name="${course.name.replace(/\s+/g, '').toLowerCase()}q${index + 1}"]:checked`);
-                if (radioInput) {
-                    coursePoints[course.name] += parseInt(radioInput.value);
-                }
-            });
-        });
-
-        // Finding the course with the most points
-        const maxPoints = Math.max(...Object.values(coursePoints));
-        const winningCourses = Object.keys(coursePoints).filter(course => coursePoints[course] === maxPoints);
-
-        // Displaying results
-        if (winningCourses.length === 1) {
-            alert(`Congratulations! You are recommended to take ${winningCourses[0]}.`);
-        } else {
-            let message = `You have a tie between the following courses: ${winningCourses.join(', ')}.`;
-            message += '\nContact a coach for guidance on which course to choose.';
-            alert(message);
         }
-    }
-</script>
+
+        generateQuestions();
+
+        function submitForm() {
+
+            // Validate user inputs
+            const userNameInput = document.getElementById('userName');
+            const userEmailInput = document.getElementById('userEmail');
+
+            if (userNameInput.checkValidity() && userEmailInput.checkValidity()) {
+                // Check if the email is either Gmail or Yahoo
+                const emailPattern = /[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com)/;
+                if (!emailPattern.test(userEmailInput.value)) {
+                    alert('Please provide a valid Gmail or Yahoo address.');
+                    return;
+                }
+                // Collect and calculate points for each course
+                const coursePoints = {};
+
+                courses.forEach(course => {
+                    coursePoints[course.name] = 0;
+
+                    course.questions.forEach((_, index) => {
+                        const radioInput = document.querySelector(`input[name="${course.name.replace(/\s+/g, '').toLowerCase()}q${index + 1}"]:checked`);
+                        if (radioInput) {
+                            coursePoints[course.name] += parseInt(radioInput.value);
+                        }
+                    });
+                });
+
+                // Finding the course with the most points
+                const maxPoints = Math.max(...Object.values(coursePoints));
+                const winningCourses = Object.keys(coursePoints).filter(course => coursePoints[course] === maxPoints);
+
+                // Displaying results
+                if (winningCourses.length === 1) {
+                    alert(`Congratulations! You are recommended to take ${winningCourses[0]}.`);
+                } else {
+                    let message = `You have a tie between the following courses: ${winningCourses.join(', ')}.`;
+                    message += '\nContact a coach for guidance on which course to choose.';
+                    alert(message);
+                }
+            } else {
+                 // Display error message for invalid inputs
+            alert('Please provide a valid name and Gmail or Yahoo address.');
+            }
+        }
+    </script>
 
 </body>
+
 </html>
