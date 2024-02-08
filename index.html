@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personality Test</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<form id="personalityForm">
+    <h2>Personality Test</h2>
+
+    <!-- Questions dynamically generated with JavaScript -->
+    <div id="questionsContainer"></div>
+
+    <button type="button" onclick="submitForm()">Submit</button>
+</form>
+
+<script>
+    const courses = [
+        {
+            name: 'Course 1',
+            questions: [
+                'I strongly agree with...',
+                'Another question for Course 1...',
+                'And one more question for Course 1...'
+            ]
+        },
+        {
+            name: 'Course 2',
+            questions: [
+                'I enjoy...',
+                'For Course 2, another question...',
+                'And yet another question for Course 2...'
+            ]
+        },
+        {
+            name: 'Course 3',
+            questions: [
+                'I find it easy to...',
+                'For Course 3, another question...',
+                'And yet another question for Course 3...'
+            ]
+        },
+        {
+            name: 'Course 4',
+            questions: [
+                'I believe that...',
+                'For Course 4, another question...',
+                'And yet another question for Course 4...'
+            ]
+        },
+        {
+            name: 'Course 5',
+            questions: [
+                'I am interested in...',
+                'For Course 5, another question...',
+                'And yet another question for Course 5...'
+            ]
+        },
+        {
+            name: 'Course 6',
+            questions: [
+                'I feel confident...',
+                'For Course 6, another question...',
+                'And yet another question for Course 6...'
+            ]
+        },
+    ];
+
+    function generateQuestions() {
+        const questionsContainer = document.getElementById('questionsContainer');
+
+        courses.forEach(course => {
+            const fieldset = document.createElement('fieldset');
+            fieldset.innerHTML = `<legend>${course.name}</legend>`;
+
+            course.questions.forEach((question, index) => {
+                const questionLabel = document.createElement('label');
+                questionLabel.innerHTML = `Question ${index + 1}: ${question}`;
+
+                const radioLabels = ['Strongly Agree', 'Agree', 'Disagree', 'Strongly Disagree'];
+
+                radioLabels.forEach((label, i) => {
+                    const radioInput = document.createElement('input');
+                    radioInput.type = 'radio';
+                    radioInput.name = `${course.name.replace(/\s+/g, '').toLowerCase()}q${index + 1}`;
+                    radioInput.value = i === 0 ? '3' : i === 1 ? '1' : i === 2 ? '0' : '-3';
+
+                    const radioInputLabel = document.createElement('label');
+                    radioInputLabel.innerHTML = `${radioInput.outerHTML} ${label}`;
+
+                    questionLabel.appendChild(radioInputLabel);
+                });
+
+                fieldset.appendChild(questionLabel);
+            });
+
+            questionsContainer.appendChild(fieldset);
+        });
+    }
+
+    generateQuestions();
+
+    function submitForm() {
+        // Collecting and calculating points for each course
+        const courses = ['Course 1', 'Course 2', 'Course 3', 'Course 4', 'Course 5', 'Course 6'];
+        const coursePoints = {};
+
+        courses.forEach(course => {
+            const questions = document.querySelectorAll(`[name^="${course.toLowerCase()}"]`);
+            let points = 0;
+
+            questions.forEach(question => {
+                points += parseInt(question.value);
+            });
+
+            coursePoints[course] = points;
+        });
+
+        // Finding the course with the most points
+        const maxPoints = Math.max(...Object.values(coursePoints));
+        const winningCourses = Object.keys(coursePoints).filter(course => coursePoints[course] === maxPoints);
+
+        // Displaying results
+        if (winningCourses.length === 1) {
+            alert(`Congratulations! You are recommended to take ${winningCourses[0]}.`);
+        } else {
+            let message = `You have a tie between the following courses: ${winningCourses.join(', ')}.`;
+            message += '\nContact a coach for guidance on which course to choose.';
+            alert(message);
+        }
+    }
+</script>
+
+</body>
+</html>
