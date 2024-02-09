@@ -9,11 +9,11 @@
 </head>
 
 <body>
-    <div id="verificationContainer">
+    <!-- <div id="verificationContainer">
         <form id="verificationForm">
             <h2>You need to verify your email before taking the personality test</h2>
 
-            <!-- User Information -->
+            <!-- User Information --
             <label for="userName">Full Name (min. 8 characters):</label>
             <input type="text" id="userName" name="userName" required minlength="8">
 
@@ -30,9 +30,9 @@
                 <button type="button" onclick="verifyCode()">Verify Code</button>
             </div>
         </form>
-    </div>
+    </div> -->
 
-    <div id="questionsContainer" style="display: none;">
+    <div id="questionsContainer" style="display: non;">
         <form id="personalityForm">
             <h2>Personality Test</h2>
 
@@ -127,10 +127,10 @@
                 questionsContainer.appendChild(fieldset);
             });
         }
+        generateQuestions();
         function showQuestions() {
             document.getElementById('verificationContainer').style.display = 'none';
             document.getElementById('questionsContainer').style.display = 'block';
-            generateQuestions();
         }
 
         function sendVerificationCode() {
@@ -210,13 +210,6 @@
             const userNameInput = document.getElementById('userName');
             const userEmailInput = document.getElementById('userEmail');
 
-            if (userNameInput.checkValidity() && userEmailInput.checkValidity()) {
-                // Check if the email is either Gmail or Yahoo
-                const emailPattern = /[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com)/;
-                if (!emailPattern.test(userEmailInput.value)) {
-                    alert('Please provide a valid Gmail or Yahoo address.');
-                    return;
-                }
                 // Collect and calculate points for each course
                 const coursePoints = {};
 
@@ -243,10 +236,7 @@
                     message += '\nContact a coach for guidance on which course to choose.';
                     alert(message);
                 }
-            } else {
-                 // Display error message for invalid inputs
-            alert('Please provide a valid name and Gmail or Yahoo address.');
-            }
+            
         }
     </script>
 
