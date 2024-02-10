@@ -9,16 +9,17 @@
 </head>
 
 <body>
-    <div id="verificationContainer">
+    <!-- <div id="verificationContainer">
         <form id="verificationForm">
             <h2>You need to verify your email before taking the personality test</h2>
 
-            <!-- User Information -->
+            <!-- User Information --
             <label for="userName">Full Name (min. 8 characters):</label>
             <input type="text" id="userName" name="userName" required minlength="8">
 
             <label for="userEmail">Email Address (Gmail or Yahoo only):</label>
-            <input type="email" id="userEmail" name="userEmail" required pattern="[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com)">
+            <input type="email" id="userEmail" name="userEmail" required
+                pattern="[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com)">
             <div class="btn-container">
                 <button type="button" onclick="sendVerificationCode()">Send Verification Code</button>
             </div>
@@ -30,9 +31,9 @@
                 <button type="button" onclick="verifyCode()">Verify Code</button>
             </div>
         </form>
-    </div>
+    </div> -->
 
-    <div id="questionsContainer" style="display: none;">
+    <div id="questionsContainer" style="display: non;">
         <form id="personalityForm">
             <h2>Personality Test</h2>
 
@@ -99,35 +100,55 @@
         function generateQuestions() {
             const questionsContainer = document.getElementById('questions');
 
-            courses.forEach(course => {
+            // Create a flat array of all questions
+            const allQuestions = courses.reduce((questions, course) => {
+                return questions.concat(course.questions.map((question, index) => ({
+                    courseName: course.name,
+                    question,
+                    index,
+                })));
+            }, []);
+
+            // Shuffle the questions randomly
+            const shuffledQuestions = shuffleArray(allQuestions);
+
+            // Create HTML elements for each question
+            shuffledQuestions.forEach(questionInfo => {
                 const fieldset = document.createElement('fieldset');
-                fieldset.innerHTML = `<legend>${course.name}</legend>`;
 
-                course.questions.forEach((question, index) => {
-                    const questionLabel = document.createElement('label');
-                    questionLabel.innerHTML = `Question ${index + 1}: ${question}`;
+                const questionLabel = document.createElement('label');
+                questionLabel.innerHTML = `${questionInfo.question}`;
 
-                    const radioLabels = ['Strongly Agree', 'Agree', 'Disagree', 'Strongly Disagree'];
+                const radioLabels = ['Strongly Agree', 'Agree', 'Disagree', 'Strongly Disagree'];
 
-                    radioLabels.forEach((label, i) => {
-                        const radioInput = document.createElement('input');
-                        radioInput.type = 'radio';
-                        radioInput.name = `${course.name.replace(/\s+/g, '').toLowerCase()}q${index + 1}`;
-                        radioInput.value = i === 0 ? '3' : i === 1 ? '1' : i === 2 ? '0' : '-3';
+                radioLabels.forEach((label, i) => {
+                    const radioInput = document.createElement('input');
+                    radioInput.type = 'radio';
+                    radioInput.name = `q${questionInfo.index + 1}`;
+                    radioInput.value = i === 0 ? '3' : i === 1 ? '1' : i === 2 ? '0' : '-3';
 
-                        const radioInputLabel = document.createElement('label');
-                        radioInputLabel.innerHTML = `${radioInput.outerHTML} ${label}`;
+                    const radioInputLabel = document.createElement('label');
+                    radioInputLabel.innerHTML = `${radioInput.outerHTML} ${label}`;
 
-                        questionLabel.appendChild(radioInputLabel);
-                    });
-
-                    fieldset.appendChild(questionLabel);
+                    questionLabel.appendChild(radioInputLabel);
                 });
 
+                fieldset.appendChild(questionLabel);
                 questionsContainer.appendChild(fieldset);
             });
         }
+
+        // Function to shuffle an array
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
         generateQuestions();
+
         function showQuestions() {
             document.getElementById('verificationContainer').style.display = 'none';
             document.getElementById('questionsContainer').style.display = 'block';
@@ -205,38 +226,32 @@
         }
 
         function submitForm() {
+            // Collect and calculate points for each course
+            const coursePoints = {};
 
-            // Validate user inputs
-            const userNameInput = document.getElementById('userName');
-            const userEmailInput = document.getElementById('userEmail');
+            courses.forEach(course => {
+                coursePoints[course.name] = 0;
 
-                // Collect and calculate points for each course
-                const coursePoints = {};
-
-                courses.forEach(course => {
-                    coursePoints[course.name] = 0;
-
-                    course.questions.forEach((_, index) => {
-                        const radioInput = document.querySelector(`input[name="${course.name.replace(/\s+/g, '').toLowerCase()}q${index + 1}"]:checked`);
-                        if (radioInput) {
-                            coursePoints[course.name] += parseInt(radioInput.value);
-                        }
-                    });
+                course.questions.forEach((_, index) => {
+                    const radioInput = document.querySelector(`input[name="${course.name.replace(/\s+/g, '').toLowerCase()}q${index + 1}"]:checked`);
+                    if (radioInput) {
+                        coursePoints[course.name] += parseInt(radioInput.value);
+                    }
                 });
+            });
 
-                // Finding the course with the most points
-                const maxPoints = Math.max(...Object.values(coursePoints));
-                const winningCourses = Object.keys(coursePoints).filter(course => coursePoints[course] === maxPoints);
+            // Finding the course with the most points
+            const maxPoints = Math.max(...Object.values(coursePoints));
+            const winningCourses = Object.keys(coursePoints).filter(course => coursePoints[course] === maxPoints);
 
-                // Displaying results
-                if (winningCourses.length === 1) {
-                    alert(`Congratulations! You are recommended to take ${winningCourses[0]}.`);
-                } else {
-                    let message = `You have a tie between the following courses: ${winningCourses.join(', ')}.`;
-                    message += '\nContact a coach for guidance on which course to choose.';
-                    alert(message);
-                }
-            
+            // Displaying results
+            if (winningCourses.length === 1) {
+                alert(`Congratulations! You are recommended to take ${winningCourses[0]}.`);
+            } else {
+                let message = `You have a tie between the following courses: ${winningCourses.join(', ')}.`;
+                message += '\nContact a coach for guidance on which course to choose.';
+                alert(message);
+            }
         }
     </script>
 
