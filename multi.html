@@ -203,8 +203,9 @@
                 const userEmailInput = document.getElementById('userEmail');
 
                 // Validate user input
-                if (!userEmailInput.checkValidity()) {
-                    alert('Please enter a valid email address.');
+              const emailPattern = /[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com)/;
+                if (!emailPattern.test(userEmailInput.value)) {
+                    alert('Please provide a valid Gmail or Yahoo address.');
                     return;
                 }
 
